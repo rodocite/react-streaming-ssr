@@ -13,9 +13,7 @@ import App from '../client/App'
 const port = 3000
 const server = express()
 
-const html = () => {
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>React Streaming SSR</title></head><body><div id="root">`
-}
+const html = '<!DOCTYPE html><html><head><style>body{margin:0;}</style><meta charset="utf-8"><title>React Streaming SSR</title></head><body><div id="root">'
 
 server.use(cors())
 
@@ -30,7 +28,7 @@ server.get('*', (req, res, next) => {
   promise.then((data) => {
     let cacheStream = createCacheStream(req.path)
     cacheStream.pipe(res)
-    cacheStream.write(html())
+    cacheStream.write(html)
     const sheet = new ServerStyleSheet()
 
     const jsx = sheet.collectStyles(

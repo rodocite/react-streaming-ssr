@@ -1,21 +1,26 @@
 import React from 'react'
-import styled from 'styled-components'
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  font-size: 40px;
-  background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);
-`
+import routes from '../shared/routes'
+import { Route, Switch } from 'react-router-dom'
+import Nav from './Nav'
 
 class App extends React.Component {
   render() {
     return (
-      <Container>{ this.props.data }</Container>
+      <div>
+        <Nav />
+        <Switch>
+         {routes.map(({ path, exact, component: C, ...rest }) => (
+            <Route
+              key={path}
+              path={path}
+              exact={exact}
+              render={(props) => (
+                <C {...props} {...rest} />
+              )}
+            />
+          ))}
+        </Switch>
+      </div>
     )
   }
 }

@@ -5,7 +5,9 @@ import path from 'path'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { renderToNodeStream } from 'react-dom/server'
+import { StaticRouter, matchPath } from "react-router-dom"
 import createCacheStream from './utils/cache'
+import routes from '../shared/routes'
 import App from '../client/App'
 
 const port = 3000
@@ -28,26 +30,37 @@ server.use(cors())
 
 server.use(express.static('./dist'))
 
-server.get('*', (req, res) => {
-  let cacheStream = createCacheStream(req.path)
-  cacheStream.pipe(res)
-  cacheStream.write(html())
-  const sheet = new ServerStyleSheet()
-  const data = 'Data'
-  const jsx = sheet.collectStyles(<App data={ data } />)
+server.get('*', (req, res, next) => {
+  const activeRoute = routes.find((route) => matchPath(req.url, route) || {})
+  const promise = activeRoute.fetchInitialData
+    ? activeRoute.fetchInitialData(req.path)
+    : Promise.resolve()
 
-  const stream = sheet.interleaveWithNodeStream(
-    renderToNodeStream(jsx)
-  )
+  promise.then((data) => {
+    let cacheStream = createCacheStream(req.path)
+    cacheStream.pipe(res)
+    cacheStream.write(html())
+    const sheet = new ServerStyleSheet()
 
-  stream.pipe(cacheStream, { end: false })
-  stream.on('end', () => cacheStream.end(`
-        </div>
-        <script src="bundle.js" async></script>
-        <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
-      </body>
-    </html>
-  `))
+    const jsx = sheet.collectStyles(
+      <StaticRouter location={req.url} context={{}}>
+        <App data={data}/>
+      </StaticRouter>
+    )
+
+    const stream = sheet.interleaveWithNodeStream(
+      renderToNodeStream(jsx)
+    )
+
+    stream.pipe(cacheStream, { end: false })
+    stream.on('end', () => cacheStream.end(`
+          </div>
+          <script src="bundle.js" async></script>
+          <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
+        </body>
+      </html>
+    `))
+  }).catch(next)
 })
 
 server.listen(port)

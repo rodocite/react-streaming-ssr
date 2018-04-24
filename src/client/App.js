@@ -13,21 +13,9 @@ const Container = styled.div`
 `
 
 class App extends React.Component {
-  state = {
-    counter: 0
-  }
-
-  componentDidMount() {
-    setInterval(() => {
-      this.setState({
-        counter: this.state.counter + 1
-      })
-    }, 1000)
-  }
-
   render() {
     return (
-      <Container>{ this.state.counter }</Container>
+      <Container>{ this.props.data }</Container>
     )
   }
 }

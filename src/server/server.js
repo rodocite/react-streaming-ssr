@@ -2,6 +2,7 @@ import express from 'express'
 import React from 'react'
 import cors from 'cors'
 import path from 'path'
+import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { renderToNodeStream } from 'react-dom/server'
 import createCacheStream from './utils/cache'
@@ -32,14 +33,21 @@ server.get('*', (req, res) => {
   cacheStream.pipe(res)
   cacheStream.write(html('yay'))
   const sheet = new ServerStyleSheet()
-  const jsx = sheet.collectStyles(<App />)
+  const data = 'Data'
+  const jsx = sheet.collectStyles(<App data={ data } />)
 
   const stream = sheet.interleaveWithNodeStream(
     renderToNodeStream(jsx)
   )
 
   stream.pipe(cacheStream, { end: false })
-  stream.on('end', () => cacheStream.end('</div><script src="bundle.js" async></script></body></html>'))
+  stream.on('end', () => cacheStream.end(`
+        </div>
+        <script src="bundle.js" async></script>
+        <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
+      </body>
+    </html>
+  `))
 })
 
 server.listen(port)

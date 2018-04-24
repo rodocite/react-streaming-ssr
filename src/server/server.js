@@ -13,13 +13,12 @@ const html = (title) => {
   return `
     <!DOCTYPE html>
     <html>
-    <head>
-      <meta charset="utf-8">
-      <title>${ title }</title>
-    </head>
-    <body>
-      <div id="root"></div>
-      <script async src="bundle.js">
+      <head>
+        <meta charset="utf-8">
+        <title>${ title }</title>
+      </head>
+      <body>
+        <div id="root">
   `
 }
 
@@ -37,7 +36,7 @@ server.get('*', (req, res) => {
   )
 
   stream.pipe(cacheStream, { end: false })
-  stream.on('end', () => cacheStream.end('</div></script></body></html>'))
+  stream.on('end', () => cacheStream.end('</div><script src="bundle.js"></script></body></html>'))
 })
 
 server.listen(port)

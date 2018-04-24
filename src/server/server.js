@@ -11,13 +11,13 @@ import App from '../client/App'
 const port = 3000
 const server = express()
 
-const html = (title) => {
+const html = () => {
   return `
     <!DOCTYPE html>
     <html>
       <head>
         <meta charset="utf-8">
-        <title>${ title }</title>
+        <title>React Streaming SSR</title>
       </head>
       <body>
         <div id="root">
@@ -31,7 +31,7 @@ server.use(express.static('./dist'))
 server.get('*', (req, res) => {
   let cacheStream = createCacheStream(req.path)
   cacheStream.pipe(res)
-  cacheStream.write(html('yay'))
+  cacheStream.write(html())
   const sheet = new ServerStyleSheet()
   const data = 'Data'
   const jsx = sheet.collectStyles(<App data={ data } />)

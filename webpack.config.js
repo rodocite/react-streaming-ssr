@@ -13,9 +13,10 @@ const browserConfig = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: `'production'`
-      }
+      // 'process.env': {
+      //   NODE_ENV: `'production'`
+      // }
+      __isBrowser__: 'true'
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
@@ -45,9 +46,10 @@ const serverConfig = {
   externals: nodeExternals(),
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: `'production'`
-      }
+      // 'process.env': {
+      //   NODE_ENV: `'production'`
+      // }
+      __isBrowser__: 'false'
     })
   ],
   module: {

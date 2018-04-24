@@ -13,7 +13,7 @@ import App from '../client/App'
 const port = 3000
 const server = express()
 
-const html = '<!DOCTYPE html><html><meta name="viewport" content="width=device-width"/><head><style>body{margin:0;}</style><meta charset="utf-8"><title>React Streaming SSR</title></head><body><div id="root">'
+const html = '<!DOCTYPE html><html><meta name="viewport" content="width=device-width"/><head><style>body{margin:0;min-height:100vh}</style><meta charset="utf-8"><title>React Streaming SSR</title></head><body><div id="root">'
 
 server.use(cors())
 

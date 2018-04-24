@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import routes from '../shared/routes'
 import { Route, Switch } from 'react-router-dom'
+import NoMatch from './404'
 import Nav from './Nav'
 
 const Container = styled.div`
@@ -31,6 +32,7 @@ class App extends React.Component {
               )}
             />
           ))}
+          <Route render={(props) => <NoMatch {...props} />} />
         </Switch>
       </Container>
     )

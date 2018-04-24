@@ -36,7 +36,7 @@ server.get('*', (req, res) => {
   )
 
   stream.pipe(cacheStream, { end: false })
-  stream.on('end', () => cacheStream.end('</div><script src="bundle.js"></script></body></html>'))
+  stream.on('end', () => cacheStream.end('</div><script src="bundle.js" async></script></body></html>'))
 })
 
 server.listen(port)

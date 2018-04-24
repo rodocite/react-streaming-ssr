@@ -1,5 +1,6 @@
 import express from 'express'
 import React from 'react'
+import cors from 'cors'
 import path from 'path'
 import { ServerStyleSheet } from 'styled-components'
 import { renderToNodeStream } from 'react-dom/server'
@@ -21,6 +22,8 @@ const html = (title) => {
         <div id="root">
   `
 }
+
+server.use(cors())
 
 server.use(express.static('./dist'))
 

@@ -1,0 +1,28 @@
+{
+  "name": "react-streaming-ssr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dist/server.js",
+    "build": "webpack --config ./webpack.backend.config.js && webpack --config ./webpack.frontend.config.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.10.4",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "webpack": "^3.8.1",
+    "webpack-node-externals": "^1.2.0"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "js-cache": "^1.0.3",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "stream": "0.0.2",
+    "styled-components": "^3.2.6"
+  }
+}

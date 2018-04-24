@@ -1,6 +1,5 @@
-
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 const Container = styled.div`
   display: flex;
@@ -11,7 +10,7 @@ const Container = styled.div`
   height: 100%;
   font-size: 40px;
   background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);
-`;
+`
 
 class App extends React.Component {
   state = {
@@ -27,11 +26,10 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <Container>{ this.state.counter }</Container>
     )
   }
 }
 
-export default App;
+export default App

@@ -1,6 +1,6 @@
-const webpack = require('webpack');
-const nodeExternals = require('webpack-node-externals');
-const path = require('path');
+const webpack = require('webpack')
+const nodeExternals = require('webpack-node-externals')
+const path = require('path')
 
 module.exports = {
   entry: {
@@ -28,4 +28,4 @@ module.exports = {
       }
     ]
   }
-};
+}

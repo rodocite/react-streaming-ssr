@@ -14,16 +14,7 @@ const port = 3000
 const server = express()
 
 const html = () => {
-  return `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <title>React Streaming SSR</title>
-      </head>
-      <body>
-        <div id="root">
-  `
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>React Streaming SSR</title></head><body><div id="root">`
 }
 
 server.use(cors())
@@ -53,13 +44,7 @@ server.get('*', (req, res, next) => {
     )
 
     stream.pipe(cacheStream, { end: false })
-    stream.on('end', () => cacheStream.end(`
-          </div>
-          <script src="bundle.js" async></script>
-          <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
-        </body>
-      </html>
-    `))
+    stream.on('end', () => cacheStream.end(`</div><script src="bundle.js" async></script><script>window.__INITIAL_DATA__ = ${serialize(data)}</script></body></html>`))
   }).catch(next)
 })
 

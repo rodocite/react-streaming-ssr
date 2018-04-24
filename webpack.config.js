@@ -24,7 +24,10 @@ const browserConfig = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        query: {
+          compact: false
+        }
       }
     ]
   }
@@ -53,7 +56,10 @@ const serverConfig = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        query: {
+          compact: false
+        }
       }
     ]
   }

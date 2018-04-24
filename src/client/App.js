@@ -6,13 +6,13 @@ import NoMatch from './404'
 import Nav from './Nav'
 
 const Container = styled.div`
+  padding: 1.4rem;
+
   *, *:before, *:after {
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 100;
     line-height: 1.5;
     margin: 0;
-    padding: 0;
   }
 `
 

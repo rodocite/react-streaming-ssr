@@ -13,13 +13,10 @@ const browserConfig = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      // 'process.env': {
-      //   NODE_ENV: `'production'`
-      // }
+      'process.env': {
+        NODE_ENV: `'development'`
+      },
       __isBrowser__: 'true'
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new webpack.optimize.UglifyJsPlugin()
   ],
@@ -46,9 +43,9 @@ const serverConfig = {
   externals: nodeExternals(),
   plugins: [
     new webpack.DefinePlugin({
-      // 'process.env': {
-      //   NODE_ENV: `'production'`
-      // }
+      'process.env': {
+        NODE_ENV: `'development'`
+      },
       __isBrowser__: 'false'
     })
   ],

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./dist/server.js",
-    "build": "webpack --config ./webpack.backend.config.js && webpack --config ./webpack.frontend.config.js"
+    "build": "webpack --config ./webpack.config.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

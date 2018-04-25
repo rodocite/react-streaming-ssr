@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 
 const Text = styled.p`
   font-size: 2.4rem;
@@ -7,38 +8,19 @@ const Text = styled.p`
 `
 
 class PageOne extends React.Component {
-  constructor(props) {
-    super(props)
-
-    let data
-
-    if (__isBrowser__) {
-      data = window.__INITIAL_DATA__
-      delete window.__INITIAL_DATA__
-    } else {
-      data = props.staticContext.data
-    }
-
-    this.state = {
-      data
-    }
-  }
-
-  componentDidMount() {
-    this.props.getInitialProps()
-      .then(data => {
-        this.setState({ data })
-      })
-  }
-
   render() {
+    __isBrowser__ ? console.log(this.props.data, 'browser') : console.log(this.props.data, 'server')
+
     return (
-      <Text>{this.state.data}</Text>
+      <Text>{this.props.data}</Text>
     )
   }
 }
 
-PageOne.getInitialProps = () => Promise.resolve(1)
+const mapStateToProps = ({ data }) => {
+  return {
+    data
+  }
+}
 
-
-export default PageOne
+export default connect(mapStateToProps)(PageOne)

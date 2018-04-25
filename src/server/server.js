@@ -6,6 +6,9 @@ import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { renderToNodeStream } from 'react-dom/server'
 import { StaticRouter, matchPath } from "react-router-dom"
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducers from '../client/reducers'
 import createCacheStream from './utils/cache'
 import routes from '../shared/routes'
 import App from '../client/App'
@@ -20,31 +23,28 @@ server.use(cors())
 server.use(express.static('./dist'))
 
 server.get('*', (req, res, next) => {
-  const activeRoute = routes.find((route) => matchPath(req.url, route))
-  const promise = activeRoute && activeRoute.getInitialProps
-    ? activeRoute.getInitialProps()
-    : Promise.resolve()
+  const store = createStore(reducers)
+  const preloadedState = store.getState()
+  let cacheStream = createCacheStream(req.path)
+  cacheStream.pipe(res)
+  cacheStream.write(html)
+  const sheet = new ServerStyleSheet()
 
-  promise.then((data) => {
-    let cacheStream = createCacheStream(req.path)
-    cacheStream.pipe(res)
-    cacheStream.write(html)
-    const sheet = new ServerStyleSheet()
-
-    const jsx = sheet.collectStyles(
-      <StaticRouter location={req.url} context={{ data }}>
+  const jsx = sheet.collectStyles(
+    <Provider store={store}>
+      <StaticRouter location={req.url}>
         <App />
       </StaticRouter>
-    )
+    </Provider>
+  )
 
-    const stream = sheet.interleaveWithNodeStream(
-      renderToNodeStream(jsx)
-    )
+  const stream = sheet.interleaveWithNodeStream(
+    renderToNodeStream(jsx)
+  )
 
-    stream.pipe(cacheStream, { end: false })
-    // stream.on('data', data => console.log(data.toString()))
-    stream.on('end', () => cacheStream.end(`</div><script src="bundle.js" async></script>${data ? '<script>window.__INITIAL_DATA__ = ' + serialize(data) : ''}</script></body></html>`))
-  }).catch(next)
+  stream.pipe(cacheStream, { end: false })
+  // stream.on('data', data => console.log(data.toString()))
+  stream.on('end', () => cacheStream.end(`</div><script src="bundle.js" async></script><script>window.__INITIAL_DATA__ = ${serialize(preloadedState)}</script></body></html>`))
 })
 
 server.listen(port)

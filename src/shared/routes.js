@@ -5,8 +5,7 @@ const routes =  [
   {
     path: '/pageOne',
     exact: true,
-    component: PageOne,
-    getInitialProps: () => Promise.resolve(2)
+    component: PageOne
   },
   {
     path: '/pageTwo',

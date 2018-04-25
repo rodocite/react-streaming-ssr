@@ -20,9 +20,9 @@ server.use(cors())
 server.use(express.static('./dist'))
 
 server.get('*', (req, res, next) => {
-  const activeRoute = routes.find((route) => matchPath(req.url, route) || {})
-  const promise = activeRoute.fetchInitialData
-    ? activeRoute.fetchInitialData(req.path)
+  const activeRoute = routes.find((route) => matchPath(req.url, route))
+  const promise = activeRoute && activeRoute.getInitialProps
+    ? activeRoute.getInitialProps()
     : Promise.resolve()
 
   promise.then((data) => {
@@ -32,8 +32,8 @@ server.get('*', (req, res, next) => {
     const sheet = new ServerStyleSheet()
 
     const jsx = sheet.collectStyles(
-      <StaticRouter location={req.url} context={{}}>
-        <App data={data}/>
+      <StaticRouter location={req.url} context={{ data }}>
+        <App />
       </StaticRouter>
     )
 
@@ -42,7 +42,7 @@ server.get('*', (req, res, next) => {
     )
 
     stream.pipe(cacheStream, { end: false })
-    stream.on('end', () => cacheStream.end(`</div><script src="bundle.js" async></script><script>window.__INITIAL_DATA__ = ${serialize(data)}</script></body></html>`))
+    stream.on('end', () => cacheStream.end(`</div><script src="bundle.js" async></script>${data ? '<script>window.__INITIAL_DATA__ = ' + serialize(data) : ''}</script></body></html>`))
   }).catch(next)
 })
 

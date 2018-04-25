@@ -7,6 +7,8 @@ const Container = styled.div`
 `
 
 class PageTwo extends React.Component {
+  componentDidMount() {
+  }
   render() {
     return (
       <Container>Page Two</Container>

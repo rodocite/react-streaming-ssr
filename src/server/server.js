@@ -42,6 +42,7 @@ server.get('*', (req, res, next) => {
     )
 
     stream.pipe(cacheStream, { end: false })
+    // stream.on('data', data => console.log(data.toString()))
     stream.on('end', () => cacheStream.end(`</div><script src="bundle.js" async></script>${data ? '<script>window.__INITIAL_DATA__ = ' + serialize(data) : ''}</script></body></html>`))
   }).catch(next)
 })
